@@ -34,6 +34,12 @@ export async function signup(formData: FormData) {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
+  const confirmedPassword = formData.get('confirm-password') as string
+  
+  if (data.password !== confirmedPassword) {
+    const errorString = "Please confirm your passwords are identical."
+    redirect(`/sign-up?error=${encodeURIComponent(errorString)}`)
+  }
 
   const { error } = await supabase.auth.signUp(data)
 

@@ -2,8 +2,19 @@ import { signup } from "@/app/login/actions";
 import Link from "next/link";
 import { BlurBottom, BlurTop } from "@/app/ui/blur";
 import { LogoTitle } from "@/app/ui/logo";
+import Toast from "@/app/ui/toast";
 
-export default function SignupPage() {
+export default function SignupPage({
+  searchParams,
+}: {
+  searchParams: {
+    error?: string;
+  };
+}) {
+  const error = searchParams?.error
+    ? decodeURIComponent(searchParams?.error)
+    : null;
+
   return (
     <div className="h-screen bg-background flex flex-col items-center justify-center">
       <BlurTop />
@@ -11,6 +22,7 @@ export default function SignupPage() {
         <LogoTitle />
       </div>
       <div className="w-4/12 bg-white rounded-lg shadow p-10 border">
+        <Toast style="error">{error}</Toast>
         <p className="text-2xl font-bold mb-6">Create an account</p>
         <form className="flex flex-col gap-y-2">
           <label htmlFor="email" className="">
@@ -37,8 +49,8 @@ export default function SignupPage() {
             Confirm Password
           </label>
           <input
-            id="password"
-            name="password"
+            id="confirm-password"
+            name="confirm-password"
             type="password"
             required
             className=" bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
