@@ -25,16 +25,6 @@ export default function SignupPage({
         <Toast style="error">{error}</Toast>
         <p className="text-2xl font-bold mb-6">Create an account</p>
         <form className="flex flex-col gap-y-2">
-          <label htmlFor="username" className="">
-            Username
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            required
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
-          />
           <label htmlFor="email" className="">
             Email
           </label>
@@ -42,6 +32,16 @@ export default function SignupPage({
             id="email"
             name="email"
             type="email"
+            required
+            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
+          <label htmlFor="username" className="">
+            Username
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
             required
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
           />
