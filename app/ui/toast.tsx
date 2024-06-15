@@ -11,8 +11,8 @@ export default function Toast({
     return (
       <div
         className={clsx("p-3 mb-4 rounded-lg", {
-          "bg-green-200": style === "success",
-          "bg-red-200": style === "error",
+          "bg-green-200 border border-green-500": style === "success",
+          "bg-red-200 border border-red-500": style === "error",
         })}
       >
         <p

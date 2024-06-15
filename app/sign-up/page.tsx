@@ -21,10 +21,20 @@ export default function SignupPage({
       <div id="logo" className="mb-4">
         <LogoTitle />
       </div>
-      <div className="w-4/12 bg-white rounded-lg shadow p-10 border">
+      <div className="min-w-96 w-4/12 bg-white rounded-lg shadow p-10 border">
         <Toast style="error">{error}</Toast>
         <p className="text-2xl font-bold mb-6">Create an account</p>
         <form className="flex flex-col gap-y-2">
+          <label htmlFor="username" className="">
+            Username
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
           <label htmlFor="email" className="">
             Email
           </label>
@@ -45,7 +55,7 @@ export default function SignupPage({
             required
             className=" bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
           />
-          <label htmlFor="password" className="">
+          <label htmlFor="confirm-password" className="">
             Confirm Password
           </label>
           <input
