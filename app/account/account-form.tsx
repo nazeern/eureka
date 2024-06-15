@@ -75,42 +75,54 @@ export default function AccountForm({ user }: { user: User | null }) {
   }
 
   return (
-    <div className="form-widget">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user?.email} disabled />
-      </div>
-      <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          value={fullname || ""}
-          onChange={(e) => setFullname(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username || ""}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="url"
-          value={website || ""}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </div>
+    <>
+      <p className="text-4xl font-semibold mb-4">Account</p>
+      <div className="w-full rounded-md bg-gray-100 p-4">
+        <div className="flex flex-col gap-y-2">
+          <label className="font-semibold" htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            type="text"
+            value={user?.email}
+            disabled
+            className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
+          <label className="font-semibold" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username || ""}
+            disabled
+            className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
+          <label className="font-semibold" htmlFor="fullName">
+            Full Name
+          </label>
+          <input
+            id="fullName"
+            type="text"
+            value={fullname || ""}
+            onChange={(e) => setFullname(e.target.value)}
+            className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
 
-      <div>
+          <label className="font-semibold" htmlFor="website">
+            Website
+          </label>
+          <input
+            id="website"
+            type="url"
+            value={website || ""}
+            onChange={(e) => setWebsite(e.target.value)}
+            className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-8"
+          />
+        </div>
         <button
-          className="button primary block"
+          className="bg-primary rounded-full px-4 py-2 text-onprimary font-semibold"
           onClick={() =>
             updateProfile({ fullname, username, website, avatar_url })
           }
@@ -119,14 +131,6 @@ export default function AccountForm({ user }: { user: User | null }) {
           {loading ? "Loading ..." : "Update"}
         </button>
       </div>
-
-      <div>
-        <form action="/auth/signout" method="post">
-          <button className="button block" type="submit">
-            Sign out
-          </button>
-        </form>
-      </div>
-    </div>
+    </>
   );
 }

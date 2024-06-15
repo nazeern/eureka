@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import clsx from "clsx";
 
 export function Logo() {
   return (
@@ -15,7 +16,11 @@ export function Logo() {
   );
 }
 
-export function LogoTitle() {
+export function LogoTitle({
+  fontColor = "dark",
+}: {
+  fontColor?: "light" | "dark";
+}) {
   return (
     <Link href="/" className="flex items-end gap-x-1">
       <Image
@@ -25,7 +30,14 @@ export function LogoTitle() {
         alt="Eureka Logo"
         className="rounded-lg border border-orange-300"
       />
-      <p className="text-2xl font-semibold">Eureka</p>
+      <p
+        className={clsx("text-2xl font-semibold", {
+          "text-secondary": fontColor == "light",
+          "": fontColor == "dark",
+        })}
+      >
+        Eureka
+      </p>
     </Link>
   );
 }
