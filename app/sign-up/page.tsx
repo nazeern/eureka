@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BlurBottom, BlurTop } from "@/app/ui/blur";
 import { LogoTitle } from "@/app/ui/logo";
 import Toast from "@/app/ui/toast";
+import FormButton from "@/app/ui/form-button";
 
 export default function SignupPage({
   searchParams,
@@ -83,11 +84,9 @@ export default function SignupPage({
               </Link>
             </label>
           </div>
-          <button formAction={signup} className="bg-primary rounded-lg mb-3">
-            <p className="text-onprimary font-semibold my-2">
-              Create an Account
-            </p>
-          </button>
+          <FormButton action={signup} loadingText="Signing up...">
+            Log In
+          </FormButton>
           <p className="text-sm font-light text-gray-500">
             Already have an account?{" "}
             <Link

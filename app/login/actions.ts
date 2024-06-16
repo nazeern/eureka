@@ -18,8 +18,11 @@ export async function login(formData: FormData) {
 
   const { error } = await supabase.auth.signInWithPassword(data)
 
+  const params = new URLSearchParams();
   if (error) {
-    redirect('/error')
+    const errorString = "Incorrect username or password. Please try again.";
+    params.set('error', errorString)
+    redirect(`/login?${params.toString()}`)
   }
 
   revalidatePath('/', 'layout')
