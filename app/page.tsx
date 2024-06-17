@@ -4,7 +4,7 @@ import { BlurTop, BlurBottom } from "@/app/ui/blur";
 
 export default function Home() {
   return (
-    <div className="bg-background">
+    <div>
       <header className="absolute inset-x-0 top-0 z-50">
         <Navbar />
       </header>

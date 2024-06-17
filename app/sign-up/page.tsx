@@ -85,7 +85,7 @@ export default function SignupPage({
             </label>
           </div>
           <FormButton action={signup} loadingText="Signing up...">
-            Log In
+            Sign Up
           </FormButton>
           <p className="text-sm font-light text-gray-500">
             Already have an account?{" "}

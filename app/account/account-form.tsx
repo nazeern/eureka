@@ -7,7 +7,7 @@ export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
   const [fullname, setFullname] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | undefined>();
   const [website, setWebsite] = useState<string | null>(null);
   const [avatar_url, setAvatarUrl] = useState<string | null>(null);
 
@@ -18,7 +18,7 @@ export default function AccountForm({ user }: { user: User | null }) {
       const { data, error, status } = await supabase
         .from("profiles")
         .select(`full_name, username, website, avatar_url`)
-        .eq("id", user?.id)
+        .eq("id", user!.id)
         .single();
 
       if (error && status !== 406) {
@@ -49,7 +49,7 @@ export default function AccountForm({ user }: { user: User | null }) {
     website,
     avatar_url,
   }: {
-    username: string | null;
+    username?: string;
     fullname: string | null;
     website: string | null;
     avatar_url: string | null;

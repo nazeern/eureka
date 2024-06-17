@@ -16,11 +16,11 @@ export default function FormButton({
   return (
     <button
       formAction={action}
-      className="text-onprimary bg-primary rounded-lg mb-3 font-semibold py-2
+      className="text-onprimary bg-primary rounded-lg mb-3 font-semibold py-2 px-4
       disabled:bg-orange-100 disabled:text-primary"
       disabled={pending}
     >
-      {pending ? "Logging in..." : children}
+      {pending ? loadingText : children}
     </button>
   );
 }
