@@ -1,7 +1,7 @@
 import AddPost from "@/app/ui/add-post";
 import { BlurTop, BlurBottom } from "@/app/ui/blur";
 import Navbar from "@/app/ui/navbar";
-import PostComponent from "@/app/ui/post-component";
+import PostsComponent from "@/app/ui/post-component";
 
 export default function PostsPage() {
   return (
@@ -14,7 +14,7 @@ export default function PostsPage() {
         <BlurTop />
         <div className="h-screen bg-background flex flex-col items-center my-20">
           <AddPost />
-          <PostComponent />
+          <PostsComponent />
         </div>
         <BlurBottom />
       </div>

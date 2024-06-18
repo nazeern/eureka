@@ -3,7 +3,7 @@ import FormButton from "./form-button";
 
 export default function AddPost() {
   return (
-    <div className="min-w-96 w-6/12 bg-white rounded-3xl shadow p-10 border border-complement bg-opacity-25">
+    <div className="min-w-96 w-6/12 bg-white rounded-3xl shadow p-10 border border-complement bg-opacity-25 mb-4">
       <p className="text-2xl font-bold mb-4">Have a great idea?</p>
       <form>
         <input
