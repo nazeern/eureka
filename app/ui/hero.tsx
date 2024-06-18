@@ -17,7 +17,7 @@ export default function Hero() {
           Everything starts with a great idea
         </h1>
         <div className="border border-primary hover:border-complement rounded-3xl md:rounded-full p-4 mb-4 shadow transition hover:-translate-y-1">
-          <Link href="/sign-up">
+          <Link href="/posts">
             <p className="text-xl font-bold text-primary">
               Need inspiration? &rarr;
             </p>
