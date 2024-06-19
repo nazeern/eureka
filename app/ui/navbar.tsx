@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LogoTitle } from "./logo";
 import { createClient } from "@/utils/supabase/server";
+import ProfileIcon from "./profile-icon";
 
 export default async function Navbar() {
   const supabase = createClient();
@@ -31,22 +32,7 @@ export default async function Navbar() {
           Company
         </a>
       </div>
-      {user ? (
-        <Link
-          href="/account"
-          className="border border-primary bg-yellow-100 rounded-full size-10 text-center align-middle pt-2
-          text-primary hover:border-complement"
-        >
-          {initial}
-        </Link>
-      ) : (
-        <Link
-          href="/login"
-          className="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Log in <span aria-hidden="true">&rarr;</span>
-        </Link>
-      )}
+      <ProfileIcon initial={initial} />
     </nav>
   );
 }
