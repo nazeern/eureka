@@ -31,7 +31,7 @@ export async function login(formData: FormData) {
   if (redirectTo) {
     redirect(redirectTo)
   } else {
-    redirect('/account')
+    redirect('/posts')
   }
 }
 
