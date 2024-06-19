@@ -11,6 +11,7 @@ export default function LoginPage({
   searchParams: {
     success?: string;
     error?: string;
+    redirectTo?: string;
   };
 }) {
   const success = searchParams?.success
@@ -20,6 +21,7 @@ export default function LoginPage({
     ? decodeURIComponent(searchParams?.error)
     : null;
   const toastStyle = success ? "success" : "error";
+  const redirectTo = searchParams?.redirectTo;
 
   return (
     <div className="h-screen bg-background flex flex-col items-center justify-center">
@@ -50,6 +52,12 @@ export default function LoginPage({
             type="password"
             required
             className=" bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-3"
+          />
+          <input
+            id="redirectTo"
+            name="redirectTo"
+            value={redirectTo}
+            type="hidden"
           />
           <FormButton action={login} loadingText="Logging in...">
             Log In

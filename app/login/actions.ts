@@ -26,7 +26,13 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/account')
+
+  const redirectTo = formData.get('redirectTo') as string
+  if (redirectTo) {
+    redirect(redirectTo)
+  } else {
+    redirect('/account')
+  }
 }
 
 export async function signup(formData: FormData) {
@@ -64,5 +70,11 @@ export async function signup(formData: FormData) {
 
   params.set('success', 'Congrats! Check your inbox for a confirmation email.')
   revalidatePath('/', 'layout')
-  redirect(`/login?${params.toString()}`)
+
+  const redirectTo = formData.get('redirectTo') as string
+  if (redirectTo) {
+    redirect(redirectTo)
+  } else {
+    redirect(`/login?${params.toString()}`)
+  }
 }

@@ -10,11 +10,13 @@ export default function SignupPage({
 }: {
   searchParams: {
     error?: string;
+    redirectTo?: string;
   };
 }) {
   const error = searchParams?.error
     ? decodeURIComponent(searchParams?.error)
     : null;
+  const redirectTo = searchParams?.redirectTo;
 
   return (
     <div className="h-screen bg-background flex flex-col items-center justify-center">
@@ -84,6 +86,12 @@ export default function SignupPage({
               </Link>
             </label>
           </div>
+          <input
+            id="redirectTo"
+            name="redirectTo"
+            value={redirectTo}
+            type="hidden"
+          />
           <FormButton action={signup} loadingText="Signing up...">
             Sign Up
           </FormButton>
