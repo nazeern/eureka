@@ -1,9 +1,8 @@
-import { login } from "@/app/login/actions";
+import { login } from "@/app/lib/actions";
 import Link from "next/link";
-import { BlurTop, BlurBottom } from "@/app/ui/blur";
 import { LogoTitle } from "@/app/ui/logo";
 import Toast from "@/app/ui/toast";
-import FormButton from "../ui/form-button";
+import FormButton from "@/app/ui/form-button";
 
 export default function LoginPage({
   searchParams,
@@ -24,8 +23,7 @@ export default function LoginPage({
   const redirectTo = searchParams?.redirectTo;
 
   return (
-    <div className="h-screen bg-background flex flex-col items-center justify-center">
-      <BlurTop />
+    <>
       <div id="logo" className="mb-4">
         <LogoTitle />
       </div>
@@ -73,7 +71,6 @@ export default function LoginPage({
           </p>
         </form>
       </div>
-      <BlurBottom />
-    </div>
+    </>
   );
 }

@@ -1,6 +1,5 @@
-import { signup } from "@/app/login/actions";
+import { signup } from "@/app/lib/actions";
 import Link from "next/link";
-import { BlurBottom, BlurTop } from "@/app/ui/blur";
 import { LogoTitle } from "@/app/ui/logo";
 import Toast from "@/app/ui/toast";
 import FormButton from "@/app/ui/form-button";
@@ -19,8 +18,7 @@ export default function SignupPage({
   const redirectTo = searchParams?.redirectTo;
 
   return (
-    <div className="h-screen bg-background flex flex-col items-center justify-center">
-      <BlurTop />
+    <>
       <div id="logo" className="mb-4">
         <LogoTitle />
       </div>
@@ -106,7 +104,6 @@ export default function SignupPage({
           </p>
         </form>
       </div>
-      <BlurBottom />
-    </div>
+    </>
   );
 }

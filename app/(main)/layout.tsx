@@ -1,15 +1,7 @@
-import { selectPost } from "@/app/lib/posts";
-import { BlurTop, BlurBottom } from "@/app/ui/blur";
-import Navbar from "@/app/ui/navbar";
+import { BlurTop, BlurBottom } from "../ui/blur";
+import Navbar from "../ui/navbar";
 
-export default async function PostPage({
-  params: { postId },
-}: {
-  params: {
-    postId: string;
-  };
-}) {
-  const post = await selectPost(postId);
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <header className="absolute inset-x-0 top-0 z-50">
@@ -19,7 +11,7 @@ export default async function PostPage({
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <BlurTop />
         <div className="h-screen bg-background flex flex-col items-center my-20">
-          <p>{post ? post.title : "No post found"}</p>
+          {children}
         </div>
         <BlurBottom />
       </div>
