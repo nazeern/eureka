@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Tables } from "./types";
 import { revalidatePath } from "next/cache";
 import { encodeBase64UUID, decodeBase64UUID } from "./string";
+import { QueryData } from "@supabase/supabase-js";
 
 export type PostWithEncodedId = Tables<'posts'> & {
     encodedId: string
@@ -46,14 +47,21 @@ export async function deletePost() {
     return;
 }
 
-export async function selectPost(encodedId: string): Promise<Tables<'posts'> | null> {
+export async function selectPost(encodedId: string) {
     const postId = decodeBase64UUID(encodedId)
 
     const supabase = createClient()
-    const { data } = await supabase.from("posts")
-                                    .select("*")
-                                    .eq('id', postId)
-                                    .single()
+    const postWithAuthorAndCommentsQuery = supabase.from("posts")
+        .select("*, profiles(username), comments(id, body, profiles(username))")
+        .eq('id', postId)
+        .single()
+    type FullPost = QueryData<typeof postWithAuthorAndCommentsQuery>
+    const { data } = await postWithAuthorAndCommentsQuery
 
-    return data;
+    if (!data) {
+        return null
+    } else {
+        const postWithAuthorAndComments: FullPost = data
+        return postWithAuthorAndComments;
+    }
 }
