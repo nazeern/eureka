@@ -27,7 +27,7 @@ export default async function PostsComponent() {
               >
                 {post.body}
               </p>
-              <div className="flex gap-x-2 mt-auto pt-6 -mb-2">
+              <div className="flex gap-x-2 mt-auto pt-6 -mb-2 items-center">
                 <LightBulbIcon className="w-6" />
                 <p>{post.countLikes}</p>
                 <BoltSlashIcon className="w-6" />
@@ -35,6 +35,12 @@ export default async function PostsComponent() {
                 <p className="ml-auto font-light text-sm mt-1">
                   By {post.author}
                 </p>
+                <div
+                  className="border border-primary bg-yellow-100 rounded-full size-8 text-center pt-1
+                  text-primary hover:border-complement"
+                >
+                  {post.author[0]}
+                </div>
               </div>
             </Link>
           );
