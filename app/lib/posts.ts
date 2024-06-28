@@ -6,25 +6,37 @@ import { revalidatePath } from "next/cache";
 import { encodeBase64UUID, decodeBase64UUID } from "./string";
 import { QueryData } from "@supabase/supabase-js";
 
-export type PostWithEncodedId = Tables<'posts'> & {
+export type ResolvedPost = Tables<'posts'> & {
     encodedId: string
+    countLikes: number
+    countDislikes: number
+    author: string
 }
 
-export async function selectPosts(): Promise<PostWithEncodedId[] | null> {
+export async function selectPosts(): Promise<ResolvedPost[] | null> {
     const supabase = createClient()
 
-    const { data } = await supabase.from("posts").select("*")
+    const postsQuery = supabase.from("posts").select("*, profiles(username)")
+    const likesQuery = supabase.from("post_action")
+        .select("post_id, post_id.count()")
+        .eq("action", 1)
+    const dislikesQuery = supabase.from("post_action")
+        .select("post_id, post_id.count()")
+        .eq("action", -1)
 
-    if (!data) {
-        return null
-    } else {
-        const result = data.map(post => ({
+    return Promise.all([postsQuery, likesQuery, dislikesQuery])
+        .then(([ postsResponse, likesResponse, dislikesResponse ]) => {
+            return postsResponse.data?.map(post => ({
                 ...post,
-                encodedId: encodeBase64UUID(post.id)
-            })
-        )
-        return result
-    }
+                encodedId: 
+                    encodeBase64UUID(post.id),
+                countLikes: 
+                    likesResponse.data?.find(({ post_id }) => post_id === post.id)?.count ?? 0,
+                countDislikes: 
+                    dislikesResponse.data?.find(({ post_id }) => post_id === post.id)?.count ?? 0,
+                author: post.profiles?.username ?? "deleted",
+            })) ?? null
+        })
 }
 
 export async function insertPost(formData: FormData) {

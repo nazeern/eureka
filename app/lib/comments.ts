@@ -7,7 +7,8 @@ import { revalidatePath } from "next/cache";
 export async function selectComments(): Promise<Tables<'comments'>[] | null> {
     const supabase = createClient()
 
-    const { data } = await supabase.from("comments").select("*")
+    const { data } = await supabase.from("comments")
+        .select("*", { count: 'estimated' })
 
     return data
 }

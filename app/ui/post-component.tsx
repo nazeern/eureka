@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PostWithEncodedId, selectPosts } from "../lib/posts";
+import { selectPosts } from "../lib/posts";
 import { Tables } from "../lib/types";
 import { LightBulbIcon, BoltSlashIcon } from "@heroicons/react/24/outline";
 
@@ -27,13 +27,14 @@ export default async function PostsComponent() {
               >
                 {post.body}
               </p>
-              <div className="flex flex-col mt-auto gap-4 self-start pt-6 -mb-2">
-                <p>{post.encodedId}</p>
-                <p>{post.id}</p>
-                {/* <LightBulbIcon className="w-6" />
-                <p>{post.upvotes}</p>
+              <div className="flex gap-x-2 mt-auto pt-6 -mb-2">
+                <LightBulbIcon className="w-6" />
+                <p>{post.countLikes}</p>
                 <BoltSlashIcon className="w-6" />
-                <p>{post.downvotes}</p> */}
+                <p>{post.countDislikes}</p>
+                <p className="ml-auto font-light text-sm mt-1">
+                  By {post.author}
+                </p>
               </div>
             </Link>
           );
