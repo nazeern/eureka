@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { selectPosts } from "../lib/posts";
-import { Tables } from "../lib/types";
 import { LightBulbIcon, BoltSlashIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 
 export default async function PostsComponent() {
   const posts = await selectPosts();
@@ -28,9 +28,17 @@ export default async function PostsComponent() {
                 {post.body}
               </p>
               <div className="flex gap-x-2 mt-auto pt-6 -mb-2 items-center">
-                <LightBulbIcon className="w-6" />
+                <LightBulbIcon
+                  className={clsx("w-6", {
+                    "text-primary": post.userLikedPost,
+                  })}
+                />
                 <p>{post.countLikes}</p>
-                <BoltSlashIcon className="w-6" />
+                <BoltSlashIcon
+                  className={clsx("w-6", {
+                    "text-complement": post.userDislikedPost,
+                  })}
+                />
                 <p>{post.countDislikes}</p>
                 <p className="ml-auto font-light text-sm mt-1">
                   By {post.author}

@@ -11,22 +11,29 @@ export type ResolvedPost = Tables<'posts'> & {
     countLikes: number
     countDislikes: number
     author: string
+    userLikedPost: boolean
+    userDislikedPost: boolean
 }
 
 export async function selectPosts(): Promise<ResolvedPost[] | null> {
     const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    const userId = user?.id
 
-    const postsQuery = supabase.from("posts").select("*, profiles(username)")
+    let postsQuery = supabase.from("posts")
+        .select("*, profiles(username), post_action(action)")
+    if (userId) { postsQuery = postsQuery.eq("post_action.user_id", userId) }
+
     const likesQuery = supabase.from("post_action")
         .select("post_id, post_id.count()")
         .eq("action", 1)
     const dislikesQuery = supabase.from("post_action")
         .select("post_id, post_id.count()")
-        .eq("action", -1)
+        .eq("action", -1);
 
     return Promise.all([postsQuery, likesQuery, dislikesQuery])
         .then(([ postsResponse, likesResponse, dislikesResponse ]) => {
-            return postsResponse.data?.map(post => ({
+            return postsResponse.data?.map(({post_action, profiles, ...post}) => ({
                 ...post,
                 encodedId: 
                     encodeBase64UUID(post.id),
@@ -34,7 +41,9 @@ export async function selectPosts(): Promise<ResolvedPost[] | null> {
                     likesResponse.data?.find(({ post_id }) => post_id === post.id)?.count ?? 0,
                 countDislikes: 
                     dislikesResponse.data?.find(({ post_id }) => post_id === post.id)?.count ?? 0,
-                author: post.profiles?.username ?? "deleted",
+                author: profiles?.username ?? "deleted",
+                userLikedPost: post_action.some(({ action }) => action == 1),
+                userDislikedPost: post_action.some(({ action }) => action == -1),
             })) ?? null
         })
 }
