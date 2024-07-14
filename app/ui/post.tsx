@@ -7,7 +7,13 @@ import { deletePostAction, insertPostAction } from "../lib/post_actions";
 import { ResolvedPost } from "../lib/posts";
 import { useState } from "react";
 
-export default function Post({ post }: { post: ResolvedPost }) {
+export default function Post({
+  key,
+  post,
+}: {
+  key: string;
+  post: ResolvedPost;
+}) {
   const likeAction = post.userLikedPost ? deletePostAction : insertPostAction;
   const dislikeAction = post.userDislikedPost
     ? deletePostAction

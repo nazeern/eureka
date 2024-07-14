@@ -12,7 +12,7 @@ export default async function PostsComponent({
     return (
       <div className="min-w-96 w-[1024px] max-w-full grid grid-cols-1 md:grid-cols-2 gap-4">
         {posts.map((post) => {
-          return <Post post={post} />;
+          return <Post key={post.id} post={post} />;
         })}
       </div>
     );
