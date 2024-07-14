@@ -1,5 +1,6 @@
 import { ResolvedPost } from "../lib/posts";
 import Post from "./post";
+import { makeid } from "@/app/lib/utils";
 
 export default async function PostsComponent({
   posts,

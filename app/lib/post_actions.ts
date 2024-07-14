@@ -1,16 +1,17 @@
-'use server'
+"use server"
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 const VALID_ACTIONS = [1, -1]
 
-export async function insertPostAction(formData: FormData) {
+export async function insertPostAction({ 
+    action, post_id 
+}: {
+    action: number, post_id: string 
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
-    const action = +formData.get("action")! as number
-    const post_id = formData.get('post_id') as string
 
     if (user && VALID_ACTIONS.includes(action)) {
         await supabase.from("post_action").insert({ 
@@ -22,12 +23,13 @@ export async function insertPostAction(formData: FormData) {
     revalidatePath('/posts')
 }
 
-export async function deletePostAction(formData: FormData) {
+export async function deletePostAction({ 
+    action, post_id 
+}: {
+    action: number, post_id: string 
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-
-    const action = +formData.get("action")! as number
-    const post_id = formData.get('post_id') as string
 
     if (user && VALID_ACTIONS.includes(action)) {
         await supabase.from("post_action")

@@ -14,12 +14,9 @@ export default function Post({
   key: string;
   post: ResolvedPost;
 }) {
-  const likeAction = post.userLikedPost ? deletePostAction : insertPostAction;
-  const dislikeAction = post.userDislikedPost
-    ? deletePostAction
-    : insertPostAction;
+  const [postState, setPostState] = useState(post);
 
-  function optimisticLikeUpdate() {
+  async function optimisticLikeUpdate() {
     let sign = 0;
     if (postState.userLikedPost) {
       sign = -1;
@@ -31,9 +28,14 @@ export default function Post({
       countLikes: postState.countLikes + sign,
       userLikedPost: !postState.userLikedPost,
     });
+    if (sign == -1) {
+      await deletePostAction({ action: 1, post_id: postState.id });
+    } else {
+      await insertPostAction({ action: 1, post_id: postState.id });
+    }
   }
 
-  function optimisticDislikeUpdate() {
+  async function optimisticDislikeUpdate() {
     let sign = 0;
     if (postState.userDislikedPost) {
       sign = -1;
@@ -45,9 +47,12 @@ export default function Post({
       countDislikes: postState.countDislikes + sign,
       userDislikedPost: !postState.userDislikedPost,
     });
+    if (sign == -1) {
+      await deletePostAction({ action: -1, post_id: postState.id });
+    } else {
+      await insertPostAction({ action: -1, post_id: postState.id });
+    }
   }
-
-  const [postState, setPostState] = useState(post);
 
   return (
     <div
@@ -66,48 +71,28 @@ export default function Post({
         </p>
       </Link>
       <div className="flex gap-x-2 mt-auto pt-6 -mb-2 items-center">
-        <form>
-          <button
-            formAction={likeAction}
-            className="flex gap-x-1 rounded-xl hover:bg-orange-100 p-1"
-            onClick={optimisticLikeUpdate}
-          >
-            <LightBulbIcon
-              className={clsx("w-6", {
-                "text-primary": postState.userLikedPost,
-              })}
-            />
-            <p>{postState.countLikes}</p>
-            <input id="action" name="action" value="1" type="hidden" />
-            <input
-              id="post_id"
-              name="post_id"
-              value={postState.id}
-              type="hidden"
-            />
-          </button>
-        </form>
-        <form>
-          <button
-            formAction={dislikeAction}
-            className="flex gap-x-1 rounded-xl hover:bg-blue-100 p-1"
-            onClick={optimisticDislikeUpdate}
-          >
-            <BoltSlashIcon
-              className={clsx("w-6", {
-                "text-complement": postState.userDislikedPost,
-              })}
-            />
-            <p>{postState.countDislikes}</p>
-            <input id="action" name="action" value="-1" type="hidden" />
-            <input
-              id="post_id"
-              name="post_id"
-              value={postState.id}
-              type="hidden"
-            />
-          </button>
-        </form>
+        <button
+          className="flex gap-x-1 rounded-xl hover:bg-orange-100 p-1"
+          onClick={optimisticLikeUpdate}
+        >
+          <LightBulbIcon
+            className={clsx("w-6", {
+              "text-primary": postState.userLikedPost,
+            })}
+          />
+          <p>{postState.countLikes}</p>
+        </button>
+        <button
+          className="flex gap-x-1 rounded-xl hover:bg-blue-100 p-1"
+          onClick={optimisticDislikeUpdate}
+        >
+          <BoltSlashIcon
+            className={clsx("w-6", {
+              "text-complement": postState.userDislikedPost,
+            })}
+          />
+          <p>{postState.countDislikes}</p>
+        </button>
 
         <p className="ml-auto font-light text-sm mt-1">By {postState.author}</p>
         <div
