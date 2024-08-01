@@ -1,4 +1,6 @@
+import { insertComment } from "@/app/lib/comments";
 import { selectPost } from "@/app/lib/posts";
+import FormButton from "@/app/ui/form-button";
 
 export default async function PostPage({
   params: { postId },
@@ -22,6 +24,7 @@ export default async function PostPage({
 
   return (
     <>
+      {/* Post main body */}
       <div className="min-w-96 w-6/12 bg-white rounded-3xl shadow p-10 border border-complement bg-opacity-25 mb-12">
         <div className="flex gap-x-2 mb-4 items-center">
           <div
@@ -37,6 +40,27 @@ export default async function PostPage({
         </p>
         <p className="text-left">{post ? post.body : "No post found"}</p>
       </div>
+
+      {/* Add post comment */}
+      <form className="min-w-96 w-6/12 p-4 rounded-3xl shadow border border-primary mb-4">
+        <input id="postId" name="postId" value={post.id} type="hidden" />
+        <textarea
+          id="body"
+          name="body"
+          placeholder="Your Comment Here..."
+          required
+          className="w-full bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-2"
+        />
+        <FormButton
+          className="-mb-0"
+          action={insertComment}
+          loadingText="Adding Comment..."
+        >
+          Add Comment
+        </FormButton>
+      </form>
+
+      {/* Post comments */}
       {comments.map((comment) => {
         const commenterName = comment.profiles?.username ?? "deleted";
 
