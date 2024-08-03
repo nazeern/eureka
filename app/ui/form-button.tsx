@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { cn } from "../lib/utils";
 
 export default function FormButton({
   action,
@@ -18,8 +19,8 @@ export default function FormButton({
   return (
     <button
       formAction={action}
-      className={`text-onprimary bg-primary rounded-lg mb-3 font-semibold py-2 px-4
-      disabled:bg-orange-100 disabled:text-primary ${className}`}
+      className={cn(`text-onprimary bg-primary rounded-lg mb-3 font-semibold py-2 px-4
+      disabled:bg-orange-100 disabled:text-primary ${className}`)}
       disabled={pending}
     >
       {pending ? loadingText : children}
