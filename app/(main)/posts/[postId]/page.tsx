@@ -1,6 +1,6 @@
-import { insertComment } from "@/app/lib/comments";
 import { selectPost } from "@/app/lib/posts";
-import FormButton from "@/app/ui/form-button";
+import AddComment from "@/app/ui/add-comment";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function PostPage({
   params: { postId },
@@ -9,6 +9,10 @@ export default async function PostPage({
     postId: string;
   };
 }) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const post = await selectPost(postId);
 
   if (!post) {
@@ -42,23 +46,11 @@ export default async function PostPage({
       </div>
 
       {/* Add post comment */}
-      <form className="min-w-96 w-6/12 p-4 rounded-3xl shadow border border-primary mb-4">
-        <input id="postId" name="postId" value={post.id} type="hidden" />
-        <textarea
-          id="body"
-          name="body"
-          placeholder="Your Comment Here..."
-          required
-          className="w-full bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg p-2 mb-2"
-        />
-        <FormButton
-          className="-mb-0"
-          action={insertComment}
-          loadingText="Adding Comment..."
-        >
-          Add Comment
-        </FormButton>
-      </form>
+      <AddComment
+        unauth={!user}
+        postId={post.id}
+        encodedPostId={post.encodedId}
+      />
 
       {/* Post comments */}
       {comments.map((comment) => {

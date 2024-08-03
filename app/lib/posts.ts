@@ -76,13 +76,18 @@ export async function selectPost(encodedId: string) {
         .select("*, profiles(username), comments(id, body, profiles(username))")
         .eq('id', postId)
         .single()
-    type FullPost = QueryData<typeof postWithAuthorAndCommentsQuery>
+    type FullPost = QueryData<typeof postWithAuthorAndCommentsQuery> & {
+        encodedId: string
+    }
     const { data } = await postWithAuthorAndCommentsQuery
 
     if (!data) {
         return null
     } else {
-        const postWithAuthorAndComments: FullPost = data
+        const postWithAuthorAndComments: FullPost = {
+            ...data,
+            encodedId
+        }
         return postWithAuthorAndComments;
     }
 }
