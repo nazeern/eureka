@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 const VALID_ACTIONS = [1, -1]
 
-export async function insertPostAction({ 
+export async function upsertPostAction({ 
     action, post_id 
 }: {
     action: number, post_id: string 
@@ -14,7 +14,7 @@ export async function insertPostAction({
     const { data: { user } } = await supabase.auth.getUser()
 
     if (user && VALID_ACTIONS.includes(action)) {
-        await supabase.from("post_action").insert({ 
+        await supabase.from("post_action").upsert({
             action: action,
             post_id: post_id,
             user_id: user.id,

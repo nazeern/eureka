@@ -3,56 +3,22 @@
 import { LightBulbIcon, BoltSlashIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
-import { deletePostAction, insertPostAction } from "../lib/post_actions";
+import { deletePostAction, upsertPostAction } from "../lib/post_actions";
 import { ResolvedPost } from "../lib/posts";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Post({
   key,
   post,
+  unauth,
 }: {
   key: string;
   post: ResolvedPost;
+  unauth: boolean;
 }) {
+  const router = useRouter();
   const [postState, setPostState] = useState(post);
-
-  async function optimisticLikeUpdate() {
-    let sign = 0;
-    if (postState.userLikedPost) {
-      sign = -1;
-    } else {
-      sign = 1;
-    }
-    setPostState({
-      ...postState,
-      countLikes: postState.countLikes + sign,
-      userLikedPost: !postState.userLikedPost,
-    });
-    if (sign == -1) {
-      await deletePostAction({ action: 1, post_id: postState.id });
-    } else {
-      await insertPostAction({ action: 1, post_id: postState.id });
-    }
-  }
-
-  async function optimisticDislikeUpdate() {
-    let sign = 0;
-    if (postState.userDislikedPost) {
-      sign = -1;
-    } else {
-      sign = 1;
-    }
-    setPostState({
-      ...postState,
-      countDislikes: postState.countDislikes + sign,
-      userDislikedPost: !postState.userDislikedPost,
-    });
-    if (sign == -1) {
-      await deletePostAction({ action: -1, post_id: postState.id });
-    } else {
-      await insertPostAction({ action: -1, post_id: postState.id });
-    }
-  }
 
   return (
     <div
@@ -104,4 +70,62 @@ export default function Post({
       </div>
     </div>
   );
+
+  async function optimisticLikeUpdate(e: MouseEvent) {
+    if (unauth) {
+      const searchParams = new URLSearchParams();
+      searchParams.set("redirectTo", "/posts");
+      router.push(`/sign-up?${searchParams.toString()}`);
+    } else {
+      let sign = 0;
+      if (postState.userLikedPost) {
+        sign = -1;
+      } else {
+        sign = 1;
+      }
+      setPostState({
+        ...postState,
+        countLikes: postState.countLikes + sign,
+        userLikedPost: !postState.userLikedPost,
+        ...(postState.userDislikedPost && {
+          countDislikes: postState.countDislikes - 1,
+          userDislikedPost: false,
+        }),
+      });
+      if (sign == -1) {
+        await deletePostAction({ action: 1, post_id: postState.id });
+      } else {
+        await upsertPostAction({ action: 1, post_id: postState.id });
+      }
+    }
+  }
+
+  async function optimisticDislikeUpdate() {
+    if (unauth) {
+      const searchParams = new URLSearchParams();
+      searchParams.set("redirectTo", "/posts");
+      router.push(`/sign-up?${searchParams.toString()}`);
+    } else {
+      let sign = 0;
+      if (postState.userDislikedPost) {
+        sign = -1;
+      } else {
+        sign = 1;
+      }
+      setPostState({
+        ...postState,
+        countDislikes: postState.countDislikes + sign,
+        userDislikedPost: !postState.userDislikedPost,
+        ...(postState.userLikedPost && {
+          countLikes: postState.countLikes - 1,
+          userLikedPost: false,
+        }),
+      });
+      if (sign == -1) {
+        await deletePostAction({ action: -1, post_id: postState.id });
+      } else {
+        await upsertPostAction({ action: -1, post_id: postState.id });
+      }
+    }
+  }
 }

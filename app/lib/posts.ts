@@ -21,7 +21,7 @@ export async function selectPosts(): Promise<ResolvedPost[] | null> {
     const userId = user?.id
 
     let postsQuery = supabase.from("posts")
-        .select("*, profiles(username), post_action(action)")
+        .select("*, profiles!posts_user_id_fkey(username), post_action(action)")
     if (userId) { postsQuery = postsQuery.eq("post_action.user_id", userId) }
 
     const likesQuery = supabase.from("post_action")
@@ -42,8 +42,8 @@ export async function selectPosts(): Promise<ResolvedPost[] | null> {
                 countDislikes: 
                     dislikesResponse.data?.find(({ post_id }) => post_id === post.id)?.count ?? 0,
                 author: profiles?.username ?? "deleted",
-                userLikedPost: post_action.some(({ action }) => action == 1),
-                userDislikedPost: post_action.some(({ action }) => action == -1),
+                userLikedPost: !!userId && post_action.some(({ action }) => action == 1),
+                userDislikedPost: !!userId && post_action.some(({ action }) => action == -1),
             })) ?? null
         })
 }
@@ -73,13 +73,13 @@ export async function selectPost(encodedId: string) {
 
     const supabase = createClient()
     const postWithAuthorAndCommentsQuery = supabase.from("posts")
-        .select("*, profiles(username), comments(id, body, profiles(username))")
+        .select("*, profiles!posts_user_id_fkey(username), comments(id, body, profiles(username))")
         .eq('id', postId)
         .single()
     type FullPost = QueryData<typeof postWithAuthorAndCommentsQuery> & {
         encodedId: string
     }
-    const { data } = await postWithAuthorAndCommentsQuery
+    const { data, error } = await postWithAuthorAndCommentsQuery
 
     if (!data) {
         return null
