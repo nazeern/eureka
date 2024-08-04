@@ -71,7 +71,7 @@ export default function Post({
     </div>
   );
 
-  async function optimisticLikeUpdate(e: MouseEvent) {
+  async function optimisticLikeUpdate(e: React.MouseEvent<HTMLButtonElement>) {
     if (unauth) {
       const searchParams = new URLSearchParams();
       searchParams.set("redirectTo", "/posts");
@@ -100,7 +100,9 @@ export default function Post({
     }
   }
 
-  async function optimisticDislikeUpdate() {
+  async function optimisticDislikeUpdate(
+    e: React.MouseEvent<HTMLButtonElement>
+  ) {
     if (unauth) {
       const searchParams = new URLSearchParams();
       searchParams.set("redirectTo", "/posts");
